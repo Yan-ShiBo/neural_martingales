@@ -358,7 +358,10 @@ class RSMLoop:
 
 
 if __name__ == "__main__":
+    # 用于解析命令行参数的标准模块,参考README中，运行命令行加参数的指令来训练
     parser = argparse.ArgumentParser()
+    # 运行环境，实验目前有3个环境，默认是2D的第一个环境
+    # "store_true",在命令行中没有给出前面的参数时默认是false，给出时变为true
     parser.add_argument("--env", default="lds0")
     parser.add_argument("--timeout", default=60, type=int)  # in minutes
     parser.add_argument("--eps", default=0.05, type=float)
@@ -375,7 +378,10 @@ if __name__ == "__main__":
     parser.add_argument("--gen_plot", action="store_true")
     parser.add_argument("--no_refinement", action="store_true")
     parser.add_argument("--plot", action="store_true")
+    # 假设不跳过的化
+    # parser.add_argument("--skip_ppo", action="store_false")
     parser.add_argument("--skip_ppo", action="store_true")
+
     parser.add_argument("--continue_ppo", action="store_true")
     parser.add_argument("--only_ppo", action="store_true")
     parser.add_argument("--small_mem", action="store_true")
@@ -400,8 +406,10 @@ if __name__ == "__main__":
         env.name = args.env
     else:
         raise ValueError(f"Unknown environment '{args.env}'")
-
+    # 新建一个文件夹，命名为checkpoints
     os.makedirs("checkpoints", exist_ok=True)
+
+    # 开头使用from rsm_learner import RSMLearner引入RSMLearner，新建一个学习器，并传入诸多参数
     learner = RSMLearner(
         [args.hidden for i in range(args.num_layers)],
         [128, 128],
@@ -414,9 +422,17 @@ if __name__ == "__main__":
         square_l_output=int(args.square_l_output),
         # square_l_output=int(args.square_l_output),
     )
+
+    # 在命令行解析处的代码：parser.add_argument("--skip_ppo", action="store_true")、parser.add_argument("--continue_ppo", action="store_true")
+    # 默认均为true，把模型加载到
+    # print(args.skip_ppo or args.continue_ppo)
     if args.skip_ppo or args.continue_ppo:
         learner.load(f"checkpoints/{args.env}_ppo.jax")
 
+
+    # #预训练已经完成，后续有报错，暂时注释掉这里
+    # 如果不跳过PPO，这个预训练的算法的化，开始预训练。默认不跳过，研究一下这里的运行报错For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+    # print(args.skip_ppo)
     if not args.skip_ppo:
         learner.pretrain_policy(args.ppo_iters, lip_start=0.05 / 10, lip_end=0.05)
         learner.save(f"checkpoints/{args.env}_ppo.jax")
@@ -459,6 +475,8 @@ if __name__ == "__main__":
         import sys
 
         sys.exit(0)
+
+    # run会报错
     sat = loop.run(args.timeout * 60)
     loop.plot_l(f"plots/{args.env}_end.png")
 

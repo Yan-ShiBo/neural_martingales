@@ -1,0 +1,245 @@
+Traceback (most recent call last):
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 57, in _wrapfunc
+    return bound(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\array_methods.py", line 753, in meth
+    return getattr(self.aval, name).fun(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _clip() got an unexpected keyword argument 'out'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 435, in <module>
+    learner.pretrain_policy(args.ppo_iters, lip_start=0.05 / 10, lip_end=0.05)
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 98, in pretrain_policy
+    ppo.run(num_iters, std_start, std_end, lip_start, lip_end)
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 182, in run
+    r = self.run_iter()
+        ^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 187, in run_iter
+    rs = [self.sample_rollout() for i in range(30)]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 187, in <listcomp>
+    rs = [self.sample_rollout() for i in range(30)]
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 159, in sample_rollout
+    next_state, reward, done, _ = self.env.step(action)
+                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py", line 124, in step
+    next_state = self.next(self.state, action)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py", line 107, in next
+    new_y = np.clip(
+            ^^^^^^^^
+  File "<__array_function__ internals>", line 200, in clip
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 2180, in clip
+    return _wrapfunc(a, 'clip', a_min, a_max, out=out, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 66, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 43, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+                     ^^^^^^^^^^^^
+jax.errors.TracerArrayConversionError: The numpy.ndarray conversion method __array__() was called on traced array with shape float32[]
+The error occurred while tracing the function next at D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:87 for jit. This value became a tracer due to JAX operations on these lines:
+
+  operation a:f32[1] = pjit[
+  name=clip
+  jaxpr={ lambda ; b:f32[1] c:i32[] d:i32[]. let
+      e:f32[] = convert_element_type[new_dtype=float32 weak_type=False] c
+      f:f32[1] = max e b
+      g:f32[] = convert_element_type[new_dtype=float32 weak_type=False] d
+      h:f32[1] = min g f
+    in (h,) }
+] i j k
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:89:17 (LDSEnv.next)
+
+  operation a:f32[] = convert_element_type[new_dtype=float32 weak_type=False] b
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:97:20 (LDSEnv.next)
+
+  operation a:f32[] = convert_element_type[new_dtype=float32 weak_type=False] b
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:97:37 (LDSEnv.next)
+See https://jax.readthedocs.io/en/latest/errors.html#jax.errors.TracerArrayConversionError
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+错误追踪：learner.pretrain_policy(args.ppo_iters, lip_start=0.05 / 10, lip_end=0.05)报错，是类rsm_learner中对象learner的方法pretrain_policy出错
+        其中是ppo.run(num_iters, std_start, std_end, lip_start, lip_end)报错，是类ppo_jax的对象PPO的方法run出错
+        其中是r = self.run_iter()报错，是类ppo_jax的对象自身的run_iter()方法出错
+        其中是rs = [self.sample_rollout() for i in range(30)]报错，是类ppo_jax的对象自身方法sample_rollout()出错
+        其中是循环中的next_state, reward, done, _ = self.env.step(action)报错，是类rl_environments中的对象env的方法step()出错
+        其中是next_state = self.next(self.state, action)报错，是类rl_environments中的对象自身方法next()出错
+        其中是np.clip出错
+
+
+
+
+
+
+
+
+
+
+
+
+#### Iteration 0 (0:00 elapsed) #####
+  0%|          | 0/200 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 476, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 124, in run
+    self.train_until_zero_loss()
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 81, in train_until_zero_loss
+    metrics = self.learner.train_epoch(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 287, in train_epoch
+    new_l_state, new_p_state, metrics = self.train_step(
+                                        ^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 258, in train_step
+    p_grad = clip_grad_norm(p_grad, 1)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\klax.py", line 54, in clip_grad_norm
+    norm = jnp.linalg.norm(
+           ^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\linalg.py", line 1117, in norm
+    check_arraylike("jnp.linalg.norm", x)
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\util.py", line 334, in check_arraylike
+    raise TypeError(msg.format(fun_name, type(arg), pos))
+TypeError: jnp.linalg.norm requires ndarray or scalar arguments, got <class 'list'> at position 0.
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+  0%|          | 0/200 [00:00<?, ?it/s]
+
+
+版本问题：无法解决，关联的包太多flax optax gym numpy tqdm tensorflow ，jax降低版本对应的这6，7个包都要降，而这些包对应的更多的包也要降
+jax==0.4.14
+flax==0.6.11
+pip install optax==0.2.2
+最新版的JAX在win下只能用cpu
+
+
+
+
+
+D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py:313: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 478, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 143, in run
+    sat, hard_violations, info = self.verifier.check_dec_cond(lipschitz_k)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 477, in check_dec_cond
+    _, ub_init = self.compute_bound_init(n)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 313, in compute_bound_init
+    mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+                                            ^^^^^^^
+  File "C:\Users\闫士博\AppData\Roaming\Python\Python311\site-packages\numpy\__init__.py", line 338, in __getattr__
+    raise AttributeError(__former_attrs__[attr])
+AttributeError: module 'numpy' has no attribute 'bool'.
+`np.bool` was a deprecated alias for the builtin `bool`. To avoid this error in existing code, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations. Did you mean: 'bool_'?
+
+
+
+
+    Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 478, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 143, in run
+    sat, hard_violations, info = self.verifier.check_dec_cond(lipschitz_k)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 477, in check_dec_cond
+    n = 50
+
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 332, in compute_bound_init
+
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 399, in compute_bounds_on_set
+    global_min = jnp.inf
+                 ^^^^^^^^
+  File "C:\Users\闫士博\AppData\Roaming\Python\Python311\site-packages\jax\_src\deprecations.py", line 55, in getattr
+    raise AttributeError(f"module {module!r} has no attribute {name!r}")
+AttributeError: module 'jax.numpy' has no attribute 'NINF'
+
+
+
+
+
+
+
+
+
+
+
+
+训练进行中
+D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\gym\spaces\box.py:127: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+Rollouts (n=10): 193.4 +- 3.5 [186.6, 197.3]
+Creating pre-train buffer ...  [done]
+
+#### Iteration 0 (0:00 elapsed) #####
+Train [l=True, p=False]: loss=-1.32, dec_loss=0.00652, violations=0.0182: 100%|██████████| 200/200 [20:58<00:00,  6.29s/it]
+Trained on 160000 samples, start_loss=4.81, end_loss=-1.32, start_violations=0.0684, end_violations=0.0182 in 21.0 minutes
+100%|██████████| 1/1 [00:00<00:00,  3.31it/s]
+100%|██████████| 77/77 [00:01<00:00, 66.60it/s]
+lipschitz_k=3268.9303041159583 (without delta)
+delta=0.006012024048096192
+K=19.65288759989554 (with delta)
+Checking GRID of size 500
+100%|██████████| 1/1 [00:44<00:00, 44.85s/it]
+violations=245644
+hard_violations=7042
+245644/250000 violated decrease condition
+7042/250000 hard violations
+Train buffer len: 167042
+Grid runtime=46.41 s
+info= {'ds_size': 160000, 'lipschitz_k': 3268.9303041159583, 'K_p': 230.78469848632812, 'K_f': 1.0, 'K_l': 14.042719841003418, 'iter': 0, 'runtime': 0.006973743438720703, 'delta': 0.006012024048096192, 'K': 19.65288759989554, 'avg_increase': 0, 'dec_violations': '245644/250000', 'hard_violations': '7042/250000'}
+
+#### Iteration 1 (21:45 elapsed) #####
+Train [l=True, p=False]: loss=-1.32, dec_loss=0.00558, violations=0.000514: 100%|██████████| 200/200 [19:53<00:00,  5.97s/it]
+Trained on 167042 samples, start_loss=-1.31, end_loss=-1.32, start_violations=0.0346, end_violations=0.000514 in 19.9 minutes
+100%|██████████| 1/1 [00:00<00:00, 133.44it/s]
+100%|██████████| 77/77 [00:00<00:00, 149.77it/s]
+lipschitz_k=3341.076120264799 (without delta)
+delta=0.006012024048096192
+K=20.086629981551898 (with delta)
+Checking GRID of size 500
+100%|██████████| 1/1 [00:34<00:00, 34.24s/it]
+violations=245644
+hard_violations=0
+Zero hard violations -> refinement of 245644 soft violations
+Took 0.00s to build refinement buffer
+Refine took 0.00s in total
+  6%|▌         | 1376/24565 [00:09<02:43, 141.91it/s]
+  0%|          | 0/200 [00:00<?, ?it/s]Refinement unsuccessful
+245644/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 167042
+Grid runtime=34.77 s
+info= {'ds_size': 167042, 'lipschitz_k': 3341.076120264799, 'K_p': 230.78469848632812, 'K_f': 1.0, 'K_l': 14.352644920349121, 'iter': 1, 'runtime': 1304.8659989833832, 'delta': 0.006012024048096192, 'K': 20.086629981551898, 'avg_increase': 0, 'dec_violations': '245644/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 2 (42:22 elapsed) #####
+Train [l=True, p=False]: loss=-1.31, dec_loss=0.00552, violations=0.000581: 100%|██████████| 200/200 [16:44<00:00,  5.02s/it]
+100%|██████████| 1/1 [00:00<00:00, 143.34it/s]
+Trained on 167042 samples, start_loss=-1.32, end_loss=-1.31, start_violations=0.000476, end_violations=0.000581 in 16.7 minutes
+100%|██████████| 77/77 [00:00<00:00, 154.50it/s]
+lipschitz_k=3330.0100469754543 (without delta)
+delta=0.006012024048096192
+K=20.02010048281836 (with delta)
+Checking GRID of size 500
+100%|██████████| 1/1 [00:33<00:00, 33.87s/it]
+violations=245644
+hard_violations=15
+245644/250000 violated decrease condition
+15/250000 hard violations
+Train buffer len: 167057
+Grid runtime=34.38 s
+info= {'ds_size': 167042, 'lipschitz_k': 3330.0100469754543, 'K_p': 230.78469848632812, 'K_f': 1.0, 'K_l': 14.305107116699219, 'iter': 2, 'runtime': 2542.4619460105896, 'delta': 0.006012024048096192, 'K': 20.02010048281836, 'avg_increase': 0, 'dec_violations': '245644/250000', 'hard_violations': '15/250000'}
+
+#### Iteration 3 (59:42 elapsed) #####

@@ -49,13 +49,30 @@ def make_unsafe_spaces(obs_space, unsafe_bounds):
     return unsafe_spaces
 
 
+# # 这个函数 clip_grad_norm 的作用是对梯度进行范数裁剪（gradient norm clipping）。
+# # 梯度范数裁剪是一种常见的深度学习技术，用来防止梯度爆炸问题。在训练神经网络时，梯度爆炸会导致权重更新过大，从而使模型训练变得不稳定。
+# # 通过对梯度进行裁剪，可以限制其范数，从而稳定训练过程。
+# grad：表示梯度，可以是一个嵌套结构（如列表、字典）或 JAX 数组。
+# max_norm：表示允许的最大范数值。如果梯度的范数超过这个值，梯度将被缩放以满足这个限制。
 @jax.jit
 def clip_grad_norm(grad, max_norm):
-    norm = jnp.linalg.norm(
-        jax.tree_util.tree_leaves(jax.tree_map(jnp.linalg.norm, grad))
-    )
+    # 以下是增加的代码，确保grad是一个ndarray
+    # 将 grad 中的所有元素转换为 jnp.array 类型
+    grad = jax.tree_util.tree_map(lambda x: jnp.array(x), grad)
+    # 对每个梯度进行平方和计算，结果是一个与 grad 结构相同的树，其中每个叶子节点是其对应梯度的平方和。
+    norms = jax.tree_util.tree_map(lambda x: jnp.sum(x ** 2), grad)
+    # 提取所有叶子节点（平方和），求和，然后取平方根得到最终的范数。
+    norm = jnp.sqrt(sum(jax.tree_util.tree_leaves(norms)))
+    # 实验单独运行不报错 jax.tree_map(jnp.linalg.norm, grad),但是不会修改下面的报错代码，故用上面的代码显式的求范式
+    # norm = jnp.linalg.norm(
+    #     jax.tree_util.tree_leaves(jax.tree_map(jnp.linalg.norm, grad))
+    # )
     factor = jnp.minimum(max_norm, max_norm / (norm + 1e-6))
     return jax.tree_map((lambda x: x * factor), grad)
+    # 尝试使用torch，但是不行！
+    # import torch
+    # parameters = [p for p in model.parameters() if p.grad is not None]
+    # return torch.nn.utils.clip_grad_norm_(parameters,max_norm)
 
 
 def contained_in_any(spaces, state):
@@ -187,6 +204,7 @@ def jax_save(params, filename):
 def jax_load(params, filename):
     with open(filename, "rb") as f:
         bytes_v = f.read()
+    # from_bytes函数允许用户从之前保存的数据（‌以字节形式）‌中恢复模型的参数
     params = flax.serialization.from_bytes(params, bytes_v)
     return params
 
@@ -217,7 +235,7 @@ if __name__ == "__main__":
     ibp_model = IBPMLP(layer_size)
     state = create_train_state(model, init_rng, 8, learning_rate)
 
-    print("Lipschitz: ", compute_lipschitz(state.params))
+    # print("Lipschitz: ", compute_lipschitz(state.params))
     del init_rng  # Must not be used anymore.
 
     fake_x = jax.random.uniform(

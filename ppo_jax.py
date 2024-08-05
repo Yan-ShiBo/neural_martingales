@@ -143,6 +143,7 @@ class PPO:
         state = self.env.reset()
         rewards_history = []
         done = False
+        # 这个循环会出错
         while not done:
             action_mean = np.array(self.p_state.apply_fn(self.p_state.params, state))
             action = (
@@ -155,7 +156,10 @@ class PPO:
                 action,
                 log_prob,
             )
+            # 这里的self.env.step(action)方法会出错，调用的rl_environments中的环境1中的step方法
             next_state, reward, done, _ = self.env.step(action)
+            # # 手动终止循环，纠错用
+            # done = True
             rewards_history.append(reward)
             state = next_state
         episode_return = np.sum(rewards_history)
@@ -175,10 +179,12 @@ class PPO:
         for i in range(num_iters):
             self.action_std = stds[i]
             self.lip_factor = lip[i]
+            # 这里把self.run_iter()的值赋给r会出错，调用自身的方法
             r = self.run_iter()
 
     def run_iter(self):
         start_time = time.time()
+        # 这里调用方法sample_rollout()会报错
         rs = [self.sample_rollout() for i in range(30)]
         p_lip = lipschitz_l1_jax(self.p_state.params)
         print(

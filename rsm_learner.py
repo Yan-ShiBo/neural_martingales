@@ -87,12 +87,14 @@ class RSMLearner:
         lip_start=0.0,
         lip_end=0.1,
     ):
+        # 调用ppo_jax中的PPO方法，初始化一个ppo
         ppo = PPO(
             self.p_state,
             self.v_state,
             self.env,
             self.p_lip,
         )
+        # 调用ppo_jax中的对象ppo的方法run，run在这里会报错
         ppo.run(num_iters, std_start, std_end, lip_start, lip_end)
 
         # Copy from PPO
@@ -312,7 +314,9 @@ class RSMLearner:
         )
 
     def load(self, filename, force_load_all=False):
+        # print(filename)
         try:
+            # 使用klax.py中的jax_load方法，就是把2进制的保存的模型恢复并更新模型中policy、value等状态，返回回来
             params = jax_load(
                 {
                     "policy": self.p_state,
@@ -321,6 +325,7 @@ class RSMLearner:
                 },
                 filename,
             )
+            # 从模型中更新后的状态保存到学习器中
             self.p_state = params["policy"]
             self.l_state = params["martingale"]
             self.v_state = params["value"]
