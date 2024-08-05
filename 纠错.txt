@@ -1,0 +1,1103 @@
+Traceback (most recent call last):
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 57, in _wrapfunc
+    return bound(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\array_methods.py", line 753, in meth
+    return getattr(self.aval, name).fun(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _clip() got an unexpected keyword argument 'out'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 435, in <module>
+    learner.pretrain_policy(args.ppo_iters, lip_start=0.05 / 10, lip_end=0.05)
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 98, in pretrain_policy
+    ppo.run(num_iters, std_start, std_end, lip_start, lip_end)
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 182, in run
+    r = self.run_iter()
+        ^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 187, in run_iter
+    rs = [self.sample_rollout() for i in range(30)]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 187, in <listcomp>
+    rs = [self.sample_rollout() for i in range(30)]
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\ppo_jax.py", line 159, in sample_rollout
+    next_state, reward, done, _ = self.env.step(action)
+                                  ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py", line 124, in step
+    next_state = self.next(self.state, action)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py", line 107, in next
+    new_y = np.clip(
+            ^^^^^^^^
+  File "<__array_function__ internals>", line 200, in clip
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 2180, in clip
+    return _wrapfunc(a, 'clip', a_min, a_max, out=out, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 66, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\numpy\core\fromnumeric.py", line 43, in _wrapit
+    result = getattr(asarray(obj), method)(*args, **kwds)
+                     ^^^^^^^^^^^^
+jax.errors.TracerArrayConversionError: The numpy.ndarray conversion method __array__() was called on traced array with shape float32[]
+The error occurred while tracing the function next at D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:87 for jit. This value became a tracer due to JAX operations on these lines:
+
+  operation a:f32[1] = pjit[
+  name=clip
+  jaxpr={ lambda ; b:f32[1] c:i32[] d:i32[]. let
+      e:f32[] = convert_element_type[new_dtype=float32 weak_type=False] c
+      f:f32[1] = max e b
+      g:f32[] = convert_element_type[new_dtype=float32 weak_type=False] d
+      h:f32[1] = min g f
+    in (h,) }
+] i j k
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:89:17 (LDSEnv.next)
+
+  operation a:f32[] = convert_element_type[new_dtype=float32 weak_type=False] b
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:97:20 (LDSEnv.next)
+
+  operation a:f32[] = convert_element_type[new_dtype=float32 weak_type=False] b
+    from line D:\1MyData\写的程序代码\python\neural_martingales\rl_environments.py:97:37 (LDSEnv.next)
+See https://jax.readthedocs.io/en/latest/errors.html#jax.errors.TracerArrayConversionError
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+错误追踪：learner.pretrain_policy(args.ppo_iters, lip_start=0.05 / 10, lip_end=0.05)报错，是类rsm_learner中对象learner的方法pretrain_policy出错
+        其中是ppo.run(num_iters, std_start, std_end, lip_start, lip_end)报错，是类ppo_jax的对象PPO的方法run出错
+        其中是r = self.run_iter()报错，是类ppo_jax的对象自身的run_iter()方法出错
+        其中是rs = [self.sample_rollout() for i in range(30)]报错，是类ppo_jax的对象自身方法sample_rollout()出错
+        其中是循环中的next_state, reward, done, _ = self.env.step(action)报错，是类rl_environments中的对象env的方法step()出错
+        其中是next_state = self.next(self.state, action)报错，是类rl_environments中的对象自身方法next()出错
+        其中是np.clip出错
+
+
+
+
+
+
+
+
+
+
+
+
+#### Iteration 0 (0:00 elapsed) #####
+  0%|          | 0/200 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 476, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 124, in run
+    self.train_until_zero_loss()
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 81, in train_until_zero_loss
+    metrics = self.learner.train_epoch(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 287, in train_epoch
+    new_l_state, new_p_state, metrics = self.train_step(
+                                        ^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_learner.py", line 258, in train_step
+    p_grad = clip_grad_norm(p_grad, 1)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\klax.py", line 54, in clip_grad_norm
+    norm = jnp.linalg.norm(
+           ^^^^^^^^^^^^^^^^
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\linalg.py", line 1117, in norm
+    check_arraylike("jnp.linalg.norm", x)
+  File "D:\2MyApp2\8-programming\anaconda3\Lib\site-packages\jax\_src\numpy\util.py", line 334, in check_arraylike
+    raise TypeError(msg.format(fun_name, type(arg), pos))
+TypeError: jnp.linalg.norm requires ndarray or scalar arguments, got <class 'list'> at position 0.
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+  0%|          | 0/200 [00:00<?, ?it/s]
+
+
+版本问题：无法解决，关联的包太多flax optax gym numpy tqdm tensorflow ，jax降低版本对应的这6，7个包都要降，而这些包对应的更多的包也要降
+jax==0.4.14
+flax==0.6.11
+pip install optax==0.2.2
+最新版的JAX在win下只能用cpu
+
+
+
+
+
+D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py:313: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 478, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 143, in run
+    sat, hard_violations, info = self.verifier.check_dec_cond(lipschitz_k)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 477, in check_dec_cond
+    _, ub_init = self.compute_bound_init(n)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 313, in compute_bound_init
+    mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+                                            ^^^^^^^
+  File "C:\Users\闫士博\AppData\Roaming\Python\Python311\site-packages\numpy\__init__.py", line 338, in __getattr__
+    raise AttributeError(__former_attrs__[attr])
+AttributeError: module 'numpy' has no attribute 'bool'.
+`np.bool` was a deprecated alias for the builtin `bool`. To avoid this error in existing code, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations. Did you mean: 'bool_'?
+
+
+
+
+    Traceback (most recent call last):
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 478, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_loop.py", line 143, in run
+    sat, hard_violations, info = self.verifier.check_dec_cond(lipschitz_k)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 477, in check_dec_cond
+    n = 50
+
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 332, in compute_bound_init
+
+  File "D:\1MyData\写的程序代码\python\neural_martingales\rsm_verifier.py", line 399, in compute_bounds_on_set
+    global_min = jnp.inf
+                 ^^^^^^^^
+  File "C:\Users\闫士博\AppData\Roaming\Python\Python311\site-packages\jax\_src\deprecations.py", line 55, in getattr
+    raise AttributeError(f"module {module!r} has no attribute {name!r}")
+AttributeError: module 'jax.numpy' has no attribute 'NINF'
+
+
+
+
+
+
+
+
+
+
+
+
+/home/gpu/YanShibo/PyProject/neural_martingales/rsm_verifier.py:339: FutureWarning: In the future `np.bool` will be defined as the corresponding NumPy scalar.
+  mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+Traceback (most recent call last):
+  File "/home/gpu/YanShibo/PyProject/neural_martingales/rsm_loop.py", line 480, in <module>
+    sat = loop.run(args.timeout * 60)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gpu/YanShibo/PyProject/neural_martingales/rsm_loop.py", line 158, in run
+    lb_unsafe, _ = self.verifier.compute_bound_unsafe(n)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gpu/YanShibo/PyProject/neural_martingales/rsm_verifier.py", line 339, in compute_bound_unsafe
+    mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+                                            ^^^^^^^
+  File "/etc/anaconda3/envs/neural_martingales/lib/python3.11/site-packages/numpy/__init__.py", line 324, in __getattr__
+    raise AttributeError(__former_attrs__[attr])
+AttributeError: module 'numpy' has no attribute 'bool'.
+`np.bool` was a deprecated alias for the builtin `bool`. To avoid this error in existing code, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+The aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:
+    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations. Did you mean: 'bool_'?
+ERROR conda.cli.main_run:execute(49): `conda run python /home/gpu/YanShibo/PyProject/neural_martingales/rsm_loop.py` failed. (See above for error)
+这里运行错因为np的bool类型被移除了，把np.bool改成bool_
+
+
+
+
+
+
+
+
+
+
+训练进行中
+/etc/anaconda3/condabin/conda run -n neural_martingales --no-capture-output python /home/gpu/YanShibo/PyProject/neural_martingales/rsm_loop.py
+2024-08-05 15:29:53.634010: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-08-05 15:29:53.675987: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-08-05 15:29:53.688081: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-08-05 15:29:54.949183: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1722842997.309968 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842997.653885 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842997.657912 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+/etc/anaconda3/envs/neural_martingales/lib/python3.11/site-packages/gym/spaces/box.py:127: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+2024-08-05 15:29:58.464669: W external/xla/xla/service/gpu/nvptx_compiler.cc:836] The NVIDIA driver's CUDA version is 12.5 which is older than the PTX compiler version (12.6.20). Because the driver is older than the PTX compiler version, XLA is disabling parallel compilation, which may slow down compilation. You should update your NVIDIA driver or use the NVIDIA-provided CUDA forward compatibility packages.
+Iter 0 R=51.30 [-3.58, 96.36] with lip = 230.785 (rollouts took 51.1s)
+I0000 00:00:1722843055.317645 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722843055.319439 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722843055.321005 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722843055.322625 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722843055.324225 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722843055.325786 3632253 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+policy_loss=0.720: 100%|█████████████████████| 470/470 [00:03<00:00, 144.31it/s]
+value_loss=217.789: 100%|████████████████████| 235/235 [00:00<00:00, 239.06it/s]
+Iter 1 R=107.39 [64.00, 163.65] with lip = 147.325 (rollouts took 44.5s)
+policy_loss=0.518: 100%|█████████████████████| 470/470 [00:00<00:00, 942.91it/s]
+value_loss=239.213: 100%|███████████████████| 235/235 [00:00<00:00, 1133.62it/s]
+Iter 2 R=126.73 [88.05, 170.88] with lip = 90.116 (rollouts took 43.3s)
+policy_loss=0.359: 100%|█████████████████████| 470/470 [00:00<00:00, 937.55it/s]
+value_loss=354.503: 100%|███████████████████| 235/235 [00:00<00:00, 1172.36it/s]
+Iter 3 R=112.60 [50.31, 166.84] with lip = 50.406 (rollouts took 44.1s)
+policy_loss=0.326: 100%|█████████████████████| 470/470 [00:00<00:00, 932.85it/s]
+value_loss=235.965: 100%|███████████████████| 235/235 [00:00<00:00, 1046.85it/s]
+Iter 4 R=96.08 [9.05, 156.22] with lip = 26.077 (rollouts took 42.5s)
+policy_loss=0.040: 100%|█████████████████████| 470/470 [00:00<00:00, 920.46it/s]
+value_loss=365.749: 100%|███████████████████| 235/235 [00:00<00:00, 1132.67it/s]
+Iter 5 R=68.30 [11.71, 144.93] with lip = 12.796 (rollouts took 43.5s)
+policy_loss=-0.006: 100%|████████████████████| 470/470 [00:00<00:00, 959.08it/s]
+value_loss=209.027: 100%|███████████████████| 235/235 [00:00<00:00, 1166.91it/s]
+Iter 6 R=51.38 [-32.16, 139.19] with lip = 5.284 (rollouts took 42.5s)
+policy_loss=-0.086: 100%|████████████████████| 470/470 [00:00<00:00, 940.26it/s]
+value_loss=315.067: 100%|███████████████████| 235/235 [00:00<00:00, 1172.48it/s]
+Iter 7 R=73.78 [3.94, 136.37] with lip = 4.004 (rollouts took 43.6s)
+policy_loss=-0.031: 100%|████████████████████| 470/470 [00:00<00:00, 968.40it/s]
+value_loss=322.480: 100%|███████████████████| 235/235 [00:00<00:00, 1165.40it/s]
+Iter 8 R=96.83 [37.69, 145.54] with lip = 4.003 (rollouts took 43.9s)
+policy_loss=0.137: 100%|█████████████████████| 470/470 [00:00<00:00, 933.10it/s]
+value_loss=242.013: 100%|███████████████████| 235/235 [00:00<00:00, 1138.04it/s]
+Iter 9 R=109.38 [2.49, 170.51] with lip = 3.991 (rollouts took 43.3s)
+policy_loss=0.115: 100%|█████████████████████| 470/470 [00:00<00:00, 940.91it/s]
+value_loss=268.593: 100%|███████████████████| 235/235 [00:00<00:00, 1160.26it/s]
+Iter 10 R=130.20 [77.80, 173.76] with lip = 3.981 (rollouts took 42.8s)
+policy_loss=0.115: 100%|█████████████████████| 470/470 [00:00<00:00, 902.07it/s]
+value_loss=297.134: 100%|███████████████████| 235/235 [00:00<00:00, 1158.64it/s]
+Iter 11 R=133.08 [69.80, 172.78] with lip = 3.995 (rollouts took 42.9s)
+policy_loss=-0.006: 100%|████████████████████| 470/470 [00:00<00:00, 952.44it/s]
+value_loss=351.007: 100%|███████████████████| 235/235 [00:00<00:00, 1109.22it/s]
+Iter 12 R=140.63 [94.11, 179.26] with lip = 3.987 (rollouts took 43.2s)
+policy_loss=0.009: 100%|█████████████████████| 470/470 [00:00<00:00, 961.79it/s]
+value_loss=352.911: 100%|███████████████████| 235/235 [00:00<00:00, 1135.88it/s]
+Iter 13 R=151.40 [121.79, 177.82] with lip = 3.972 (rollouts took 43.2s)
+policy_loss=-0.061: 100%|████████████████████| 470/470 [00:00<00:00, 964.54it/s]
+value_loss=411.936: 100%|███████████████████| 235/235 [00:00<00:00, 1177.52it/s]
+Iter 14 R=161.39 [128.00, 180.32] with lip = 3.985 (rollouts took 43.1s)
+policy_loss=0.144: 100%|█████████████████████| 470/470 [00:00<00:00, 959.20it/s]
+value_loss=374.822: 100%|███████████████████| 235/235 [00:00<00:00, 1195.51it/s]
+Iter 15 R=164.84 [126.21, 181.20] with lip = 3.987 (rollouts took 43.7s)
+policy_loss=0.071: 100%|█████████████████████| 470/470 [00:00<00:00, 944.73it/s]
+value_loss=443.925: 100%|███████████████████| 235/235 [00:00<00:00, 1161.90it/s]
+Iter 16 R=169.68 [133.99, 188.10] with lip = 3.968 (rollouts took 42.7s)
+policy_loss=0.123: 100%|█████████████████████| 470/470 [00:00<00:00, 952.08it/s]
+value_loss=419.226: 100%|███████████████████| 235/235 [00:00<00:00, 1181.12it/s]
+Iter 17 R=174.40 [152.99, 188.09] with lip = 3.959 (rollouts took 42.7s)
+policy_loss=0.091: 100%|█████████████████████| 470/470 [00:00<00:00, 957.26it/s]
+value_loss=427.215: 100%|███████████████████| 235/235 [00:00<00:00, 1112.97it/s]
+Iter 18 R=174.01 [133.17, 187.49] with lip = 4.004 (rollouts took 43.9s)
+policy_loss=0.259: 100%|█████████████████████| 470/470 [00:00<00:00, 984.15it/s]
+value_loss=503.330: 100%|███████████████████| 235/235 [00:00<00:00, 1133.99it/s]
+Iter 19 R=177.40 [167.16, 188.53] with lip = 3.989 (rollouts took 43.1s)
+policy_loss=-0.015: 100%|████████████████████| 470/470 [00:00<00:00, 964.29it/s]
+value_loss=373.565: 100%|███████████████████| 235/235 [00:00<00:00, 1168.05it/s]
+Iter 20 R=182.70 [170.69, 190.03] with lip = 3.933 (rollouts took 42.4s)
+policy_loss=0.037: 100%|█████████████████████| 470/470 [00:00<00:00, 958.35it/s]
+value_loss=453.832: 100%|███████████████████| 235/235 [00:00<00:00, 1164.01it/s]
+Iter 21 R=182.96 [169.60, 191.79] with lip = 3.952 (rollouts took 43.5s)
+policy_loss=0.173: 100%|█████████████████████| 470/470 [00:00<00:00, 962.88it/s]
+value_loss=548.476: 100%|███████████████████| 235/235 [00:00<00:00, 1179.49it/s]
+Iter 22 R=181.12 [160.45, 189.45] with lip = 3.917 (rollouts took 42.1s)
+policy_loss=0.226: 100%|█████████████████████| 470/470 [00:00<00:00, 954.71it/s]
+value_loss=467.236: 100%|███████████████████| 235/235 [00:00<00:00, 1166.64it/s]
+Iter 23 R=186.80 [177.70, 192.77] with lip = 3.962 (rollouts took 43.9s)
+policy_loss=-0.035: 100%|████████████████████| 470/470 [00:00<00:00, 944.59it/s]
+value_loss=463.327: 100%|███████████████████| 235/235 [00:00<00:00, 1189.16it/s]
+Iter 24 R=185.75 [168.99, 192.10] with lip = 3.996 (rollouts took 43.3s)
+policy_loss=0.146: 100%|█████████████████████| 470/470 [00:00<00:00, 949.58it/s]
+value_loss=412.608: 100%|███████████████████| 235/235 [00:00<00:00, 1146.00it/s]
+Iter 25 R=186.27 [178.66, 191.92] with lip = 3.942 (rollouts took 43.5s)
+policy_loss=0.186: 100%|█████████████████████| 470/470 [00:00<00:00, 932.11it/s]
+value_loss=435.445: 100%|███████████████████| 235/235 [00:00<00:00, 1161.26it/s]
+Iter 26 R=187.85 [182.64, 193.49] with lip = 3.907 (rollouts took 42.9s)
+policy_loss=0.131: 100%|█████████████████████| 470/470 [00:00<00:00, 952.05it/s]
+value_loss=420.641: 100%|███████████████████| 235/235 [00:00<00:00, 1146.91it/s]
+Iter 27 R=188.54 [173.18, 194.05] with lip = 3.984 (rollouts took 42.8s)
+policy_loss=0.066: 100%|█████████████████████| 470/470 [00:00<00:00, 968.51it/s]
+value_loss=495.672: 100%|███████████████████| 235/235 [00:00<00:00, 1133.43it/s]
+Iter 28 R=188.82 [183.20, 194.41] with lip = 3.966 (rollouts took 44.1s)
+policy_loss=0.047: 100%|█████████████████████| 470/470 [00:00<00:00, 961.45it/s]
+value_loss=560.003: 100%|███████████████████| 235/235 [00:00<00:00, 1140.25it/s]
+Iter 29 R=189.89 [184.69, 194.51] with lip = 3.867 (rollouts took 42.9s)
+policy_loss=0.237: 100%|█████████████████████| 470/470 [00:00<00:00, 966.01it/s]
+value_loss=446.192: 100%|███████████████████| 235/235 [00:00<00:00, 1227.09it/s]
+Iter 30 R=189.64 [178.72, 194.88] with lip = 3.994 (rollouts took 42.9s)
+policy_loss=0.160: 100%|█████████████████████| 470/470 [00:00<00:00, 965.92it/s]
+value_loss=537.034: 100%|███████████████████| 235/235 [00:00<00:00, 1162.92it/s]
+Iter 31 R=190.79 [184.89, 195.13] with lip = 3.849 (rollouts took 43.0s)
+policy_loss=0.195: 100%|█████████████████████| 470/470 [00:00<00:00, 945.50it/s]
+value_loss=431.618: 100%|███████████████████| 235/235 [00:00<00:00, 1178.77it/s]
+Iter 32 R=190.63 [183.87, 194.81] with lip = 3.870 (rollouts took 44.0s)
+policy_loss=0.111: 100%|█████████████████████| 470/470 [00:00<00:00, 966.75it/s]
+value_loss=464.281: 100%|███████████████████| 235/235 [00:00<00:00, 1220.10it/s]
+Iter 33 R=191.28 [181.36, 195.47] with lip = 3.843 (rollouts took 44.0s)
+policy_loss=0.040: 100%|█████████████████████| 470/470 [00:00<00:00, 963.05it/s]
+value_loss=481.861: 100%|███████████████████| 235/235 [00:00<00:00, 1187.95it/s]
+Iter 34 R=191.44 [185.03, 194.72] with lip = 3.692 (rollouts took 43.1s)
+policy_loss=0.210: 100%|█████████████████████| 470/470 [00:00<00:00, 956.18it/s]
+value_loss=527.451: 100%|███████████████████| 235/235 [00:00<00:00, 1187.12it/s]
+Iter 35 R=191.45 [184.90, 195.40] with lip = 3.819 (rollouts took 43.1s)
+policy_loss=0.140: 100%|█████████████████████| 470/470 [00:00<00:00, 960.50it/s]
+value_loss=547.216: 100%|███████████████████| 235/235 [00:00<00:00, 1140.18it/s]
+Iter 36 R=191.99 [184.42, 196.20] with lip = 3.939 (rollouts took 43.4s)
+policy_loss=0.312: 100%|█████████████████████| 470/470 [00:00<00:00, 946.98it/s]
+value_loss=604.398: 100%|███████████████████| 235/235 [00:00<00:00, 1127.19it/s]
+Iter 37 R=192.21 [188.26, 196.08] with lip = 3.856 (rollouts took 42.7s)
+policy_loss=0.015: 100%|█████████████████████| 470/470 [00:00<00:00, 932.69it/s]
+value_loss=478.802: 100%|███████████████████| 235/235 [00:00<00:00, 1155.13it/s]
+Iter 38 R=192.61 [189.66, 195.56] with lip = 3.965 (rollouts took 42.7s)
+policy_loss=0.088: 100%|█████████████████████| 470/470 [00:00<00:00, 949.99it/s]
+value_loss=541.175: 100%|███████████████████| 235/235 [00:00<00:00, 1137.86it/s]
+Iter 39 R=193.10 [188.48, 196.08] with lip = 3.887 (rollouts took 51.5s)
+policy_loss=0.238: 100%|█████████████████████| 470/470 [00:00<00:00, 952.81it/s]
+value_loss=467.174: 100%|███████████████████| 235/235 [00:00<00:00, 1130.07it/s]
+Iter 40 R=193.24 [186.15, 195.99] with lip = 3.903 (rollouts took 56.5s)
+policy_loss=0.004: 100%|█████████████████████| 470/470 [00:00<00:00, 958.49it/s]
+value_loss=620.369: 100%|███████████████████| 235/235 [00:00<00:00, 1120.29it/s]
+Iter 41 R=193.35 [190.52, 196.54] with lip = 3.900 (rollouts took 43.5s)
+policy_loss=0.136: 100%|█████████████████████| 470/470 [00:00<00:00, 928.42it/s]
+value_loss=450.948: 100%|███████████████████| 235/235 [00:00<00:00, 1185.57it/s]
+Iter 42 R=193.88 [191.98, 196.43] with lip = 3.943 (rollouts took 43.6s)
+policy_loss=0.077: 100%|█████████████████████| 470/470 [00:00<00:00, 971.76it/s]
+value_loss=491.046: 100%|███████████████████| 235/235 [00:00<00:00, 1150.88it/s]
+Iter 43 R=193.72 [190.81, 196.74] with lip = 3.837 (rollouts took 43.5s)
+policy_loss=0.250: 100%|█████████████████████| 470/470 [00:00<00:00, 943.55it/s]
+value_loss=526.952: 100%|███████████████████| 235/235 [00:00<00:00, 1158.83it/s]
+Iter 44 R=193.40 [188.15, 196.92] with lip = 3.963 (rollouts took 43.4s)
+policy_loss=0.089: 100%|█████████████████████| 470/470 [00:00<00:00, 966.72it/s]
+value_loss=484.290: 100%|███████████████████| 235/235 [00:00<00:00, 1184.12it/s]
+ Iter 45 R=194.21 [190.36, 196.79] with lip = 3.869 (rollouts took 43.2s)
+policy_loss=0.285: 100%|█████████████████████| 470/470 [00:00<00:00, 925.14it/s]
+value_loss=569.245: 100%|███████████████████| 235/235 [00:00<00:00, 1190.68it/s]
+Iter 46 R=194.24 [191.52, 196.68] with lip = 3.973 (rollouts took 43.0s)
+policy_loss=0.109: 100%|█████████████████████| 470/470 [00:00<00:00, 955.22it/s]
+value_loss=499.798: 100%|███████████████████| 235/235 [00:00<00:00, 1150.53it/s]
+Iter 47 R=194.57 [191.27, 197.33] with lip = 3.759 (rollouts took 43.2s)
+policy_loss=-0.051: 100%|████████████████████| 470/470 [00:00<00:00, 960.28it/s]
+value_loss=400.305: 100%|███████████████████| 235/235 [00:00<00:00, 1130.92it/s]
+Iter 48 R=194.68 [192.46, 197.28] with lip = 3.954 (rollouts took 43.5s)
+policy_loss=0.241: 100%|█████████████████████| 470/470 [00:00<00:00, 958.60it/s]
+value_loss=545.681: 100%|███████████████████| 235/235 [00:00<00:00, 1166.22it/s]
+Iter 49 R=194.59 [190.65, 197.44] with lip = 3.947 (rollouts took 43.2s)
+policy_loss=0.203: 100%|█████████████████████| 470/470 [00:00<00:00, 976.00it/s]
+value_loss=514.533: 100%|███████████████████| 235/235 [00:00<00:00, 1177.94it/s]
+[SAVED]
+Rollouts (n=10): 195.1 +- 1.1 [193.4, 197.0]
+Creating pre-train buffer ...  [done]
+
+#### Iteration 0 (0:00 elapsed) #####
+Train [l=True, p=False]: loss=-3.61, dec_loss=0.00321, violations=9.77e-05: 100%
+Trained on 160000 samples, start_loss=2.57, end_loss=-3.61, start_violations=0.0363, end_violations=9.77e-05 in 53.4 seconds
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00,  1.77it/s]
+100%|███████████████████████████████████████████| 77/77 [00:01<00:00, 55.20it/s]
+lipschitz_k=70.94567330199561 (without delta)
+delta=0.006012024048096192
+K=0.4265270939999736 (with delta)
+Checking GRID of size 500
+100%|████████████████████████████████████████████| 1/1 [03:44<00:00, 224.52s/it]
+violations=125516
+hard_violations=0
+Zero hard violations -> refinement of 125516 soft violations
+Took 0.03s to build refinement buffer
+Refine took 0.03s in total
+  0%|                                       | 4/12552 [00:02<2:35:59,  1.34it/s]
+Refinement unsuccessful
+125516/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 160000
+Grid runtime=4 min
+info= {'ds_size': 160000, 'lipschitz_k': 70.94567330199561, 'K_p': 3.844038248062134, 'K_f': 1.0, 'K_l': 12.139837265014648, 'iter': 0, 'runtime': 0.0038421154022216797, 'delta': 0.006012024048096192, 'K': 0.4265270939999736, 'avg_increase': 0, 'dec_violations': '125516/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 1 (4:43 elapsed) #####
+Train [l=True, p=False]: loss=-3.61, dec_loss=0.0037, violations=0.000732: 100%|
+Trained on 160000 samples, start_loss=-3.61, end_loss=-3.61, start_violations=9.16e-05, end_violations=0.000732 in 44.5 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 141.30it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 149.14it/s]
+lipschitz_k=71.34126121437316 (without delta)
+delta=0.006012024048096192
+K=0.4289053780423236 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [01:26<00:00, 86.05s/it]
+violations=119584
+hard_violations=107
+119584/250000 violated decrease condition
+107/250000 hard violations
+Train buffer len: 160107
+Grid runtime=1 min
+info= {'ds_size': 160000, 'lipschitz_k': 71.34126121437316, 'K_p': 3.844038248062134, 'K_f': 1.0, 'K_l': 12.207528114318848, 'iter': 1, 'runtime': 283.274386882782, 'delta': 0.006012024048096192, 'K': 0.4289053780423236, 'avg_increase': 0, 'dec_violations': '119584/250000', 'hard_violations': '107/250000'}
+
+#### Iteration 2 (6:54 elapsed) #####
+Train [l=True, p=False]: loss=-3.61, dec_loss=0.00363, violations=0.00188: 100%|
+Trained on 160107 samples, start_loss=-3.6, end_loss=-3.61, start_violations=0.000524, end_violations=0.00188 in 50.4 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 132.26it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 143.33it/s]
+lipschitz_k=70.45856607955238 (without delta)
+delta=0.006012024048096192
+K=0.4235985936646436 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:24<00:00, 24.40s/it]
+violations=119619
+hard_violations=1275
+119619/250000 violated decrease condition
+1275/250000 hard violations
+Train buffer len: 161382
+Grid runtime=24.98 s
+info= {'ds_size': 160107, 'lipschitz_k': 70.45856607955238, 'K_p': 3.844038248062134, 'K_f': 1.0, 'K_l': 12.056486129760742, 'iter': 2, 'runtime': 414.3645396232605, 'delta': 0.006012024048096192, 'K': 0.4235985936646436, 'avg_increase': 0, 'dec_violations': '119619/250000', 'hard_violations': '1275/250000'}
+
+#### Iteration 3 (8:10 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00199, violations=0.000262: 100%|
+Trained on 161382 samples, start_loss=-3.6, end_loss=-3.62, start_violations=0.00427, end_violations=0.000262 in 49.8 seconds
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00, 90.38it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 147.46it/s]
+lipschitz_k=65.21838601136824 (without delta)
+delta=0.006012024048096192
+K=0.3920945050783662 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:04<00:00,  4.63s/it]
+violations=127481
+hard_violations=0
+Zero hard violations -> refinement of 127481 soft violations
+Took 0.03s to build refinement buffer
+Refine took 0.03s in total
+  0%|                                                 | 0/12749 [00:02<?, ?it/s]
+Refinement unsuccessful
+127481/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 161382
+Grid runtime=5.17 s
+info= {'ds_size': 161382, 'lipschitz_k': 65.21838601136824, 'K_p': 3.9875078201293945, 'K_f': 1.0, 'K_l': 10.892409324645996, 'iter': 3, 'runtime': 489.7762641906738, 'delta': 0.006012024048096192, 'K': 0.3920945050783662, 'avg_increase': 0, 'dec_violations': '127481/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 4 (9:07 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00153, violations=9.46e-05: 100%|
+Trained on 161382 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.000208, end_violations=9.46e-05 in 44.9 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 125.95it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 146.77it/s]
+lipschitz_k=63.46549137517104 (without delta)
+delta=0.006012024048096192
+K=0.38155606037176976 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:04<00:00,  4.96s/it]
+violations=124012
+hard_violations=0
+Zero hard violations -> refinement of 124012 soft violations
+Took 0.03s to build refinement buffer
+Refine took 0.03s in total
+  0%|                                                 | 0/12402 [00:02<?, ?it/s]
+Refinement unsuccessful
+124012/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 161382
+Grid runtime=5.50 s
+info= {'ds_size': 161382, 'lipschitz_k': 63.46549137517104, 'K_p': 3.9600744247436523, 'K_f': 1.0, 'K_l': 10.648439407348633, 'iter': 4, 'runtime': 546.8103334903717, 'delta': 0.006012024048096192, 'K': 0.38155606037176976, 'avg_increase': 0, 'dec_violations': '124012/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 5 (9:59 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00137, violations=1.83e-05: 100%|
+Trained on 161382 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.0005, end_violations=1.83e-05 in 45.1 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 137.21it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 155.98it/s]
+lipschitz_k=63.81439497209112 (without delta)
+delta=0.006012024048096192
+K=0.38365367718692056 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:08<00:00,  8.05s/it]
+violations=121844
+hard_violations=0
+Zero hard violations -> refinement of 121844 soft violations
+Took 0.04s to build refinement buffer
+Refine took 0.04s in total
+  0%|                                                 | 0/12185 [00:02<?, ?it/s]
+Refinement unsuccessful
+121844/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 161382
+Grid runtime=8.57 s
+info= {'ds_size': 161382, 'lipschitz_k': 63.81439497209112, 'K_p': 3.9729762077331543, 'K_f': 1.0, 'K_l': 10.683852195739746, 'iter': 5, 'runtime': 599.326856136322, 'delta': 0.006012024048096192, 'K': 0.38365367718692056, 'avg_increase': 0, 'dec_violations': '121844/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 6 (10:55 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00155, violations=0.000555: 100%|
+Trained on 161382 samples, start_loss=-3.62, end_loss=-3.62, start_violations=5.49e-05, end_violations=0.000555 in 45.1 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 140.86it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 143.22it/s]
+lipschitz_k=62.95160157992109 (without delta)
+delta=0.006012024048096192
+K=0.37846654256465584 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:06<00:00,  6.84s/it]
+violations=120818
+hard_violations=4
+120818/250000 violated decrease condition
+4/250000 hard violations
+Train buffer len: 161386
+Grid runtime=7.39 s
+info= {'ds_size': 161382, 'lipschitz_k': 62.95160157992109, 'K_p': 3.9508674144744873, 'K_f': 1.0, 'K_l': 10.578558921813965, 'iter': 6, 'runtime': 655.2035329341888, 'delta': 0.006012024048096192, 'K': 0.37846654256465584, 'avg_increase': 0, 'dec_violations': '120818/250000', 'hard_violations': '4/250000'}
+
+#### Iteration 7 (11:48 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00146, violations=0.000336: 100%|
+Trained on 161386 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.000555, end_violations=0.000336 in 1.9 minutes
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 104.68it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 145.28it/s]
+lipschitz_k=63.69504024170942 (without delta)
+delta=0.006012024048096192
+K=0.38293611367761177 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:16<00:00, 16.93s/it]
+violations=117510
+hard_violations=0
+Zero hard violations -> refinement of 117510 soft violations
+Took 0.20s to build refinement buffer
+Refine took 0.20s in total
+  0%|                                                 | 0/11751 [00:07<?, ?it/s]
+Refinement unsuccessful
+117510/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 161386
+Grid runtime=17.49 s
+info= {'ds_size': 161386, 'lipschitz_k': 63.69504024170942, 'K_p': 3.8249752521514893, 'K_f': 1.0, 'K_l': 10.93481731414795, 'iter': 7, 'runtime': 707.6858406066895, 'delta': 0.006012024048096192, 'K': 0.38293611367761177, 'avg_increase': 0, 'dec_violations': '117510/250000', 'hard_violations': '0/250000'}
+
+#### Iteration 8 (14:07 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00145, violations=0.00058: 100%|█
+Trained on 161386 samples, start_loss=-3.63, end_loss=-3.62, start_violations=0.000165, end_violations=0.00058 in 1.9 minutes
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00, 51.88it/s]
+100%|███████████████████████████████████████████| 77/77 [00:01<00:00, 60.95it/s]
+lipschitz_k=64.05689932107134 (without delta)
+delta=0.006012024048096192
+K=0.38511161916475756 (with delta)
+Checking GRID of size 500
+100%|█████████████████████████████████████████████| 1/1 [00:12<00:00, 12.71s/it]
+violations=119004
+hard_violations=0
+Zero hard violations -> refinement of 119004 soft violations
+Took 0.03s to build refinement buffer
+Refine took 0.03s in total
+  0%|                                                 | 0/11901 [00:02<?, ?it/s]
+Refinement unsuccessful
+119004/250000 violated decrease condition
+0/250000 hard violations
+Train buffer len: 161386
+Grid runtime=14.03 s
+info= {'ds_size': 161386, 'lipschitz_k': 64.05689932107134, 'K_p': 3.9834818840026855, 'K_f': 1.0, 'K_l': 10.705622673034668, 'iter': 8, 'runtime': 847.2877695560455, 'delta': 0.006012024048096192, 'K': 0.38511161916475756, 'avg_increase': 0, 'dec_violations': '119004/250000', 'hard_violations': '0/250000'}
+Refining grid
+
+#### Iteration 9 (16:21 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00172, violations=0.00137: 100%|█
+Trained on 161386 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.00058, end_violations=0.00137 in 2.2 minutes
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00, 53.60it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 130.87it/s]
+lipschitz_k=63.27415614606252 (without delta)
+delta=0.003003003003003003
+K=0.19001248091910666 (with delta)
+Checking GRID of size 1000
+100%|████████████████████████████████████████████| 1/1 [13:38<00:00, 818.30s/it]
+violations=327750
+hard_violations=0
+Zero hard violations -> refinement of 327750 soft violations
+Took 0.10s to build refinement buffer
+Refine took 0.10s in total
+  0%|                                        | 14/32775 [00:01<50:15, 10.87it/s]
+Refinement unsuccessful
+327750/1000000 violated decrease condition
+0/1000000 hard violations
+Train buffer len: 161386
+Grid runtime=14 min
+info= {'ds_size': 161386, 'lipschitz_k': 63.27415614606252, 'K_p': 3.8472869396209717, 'K_f': 1.0, 'K_l': 10.821113586425781, 'iter': 9, 'runtime': 980.6325716972351, 'delta': 0.003003003003003003, 'K': 0.19001248091910666, 'avg_increase': 0, 'dec_violations': '327750/1000000', 'hard_violations': '0/1000000'}
+
+#### Iteration 10 (32:13 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.0016, violations=0.00107: 100%|█|
+Trained on 161386 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.000531, end_violations=0.00107 in 51.7 seconds
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00,  2.14it/s]
+100%|███████████████████████████████████████████| 77/77 [00:01<00:00, 57.58it/s]
+lipschitz_k=63.901234313673285 (without delta)
+delta=0.003003003003003003
+K=0.19189559853955943 (with delta)
+Checking GRID of size 1000
+100%|████████████████████████████████████████████| 1/1 [01:42<00:00, 102.17s/it]
+violations=328363
+hard_violations=0
+Zero hard violations -> refinement of 328363 soft violations
+Took 0.09s to build refinement buffer
+Refine took 0.09s in total
+  0%|                                        | 12/32837 [00:00<09:51, 55.46it/s]
+Refinement unsuccessful
+328363/1000000 violated decrease condition
+0/1000000 hard violations
+Train buffer len: 161386
+Grid runtime=2 min
+info= {'ds_size': 161386, 'lipschitz_k': 63.901234313673285, 'K_p': 3.8908917903900146, 'K_f': 1.0, 'K_l': 10.847463607788086, 'iter': 10, 'runtime': 1933.4157350063324, 'delta': 0.003003003003003003, 'K': 0.19189559853955943, 'avg_increase': 0, 'dec_violations': '328363/1000000', 'hard_violations': '0/1000000'}
+Refining grid
+
+#### Iteration 11 (34:50 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.00177, violations=0.0013: 100%|█|
+Trained on 161386 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.00182, end_violations=0.0013 in 45.1 seconds
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00, 86.82it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 146.98it/s]
+lipschitz_k=64.90801129607416 (without delta)
+delta=0.0015007503751875938
+K=0.09741072230526387 (with delta)
+Checking GRID of size 2000
+kernel_t: 14688.29us/iter (34.86 Kints/s): : 4it [02:05, 31.49s/it]
+violations=588499
+hard_violations=2809
+588499/4000000 violated decrease condition
+2809/4000000 hard violations
+Train buffer len: 164195
+Grid runtime=2 min
+info= {'ds_size': 161386, 'lipschitz_k': 64.90801129607416, 'K_p': 3.9878201484680176, 'K_f': 1.0, 'K_l': 10.840006828308105, 'iter': 11, 'runtime': 2089.6093101501465, 'delta': 0.0015007503751875938, 'K': 0.09741072230526387, 'avg_increase': 0, 'dec_violations': '588499/4000000', 'hard_violations': '2809/4000000'}
+
+#### Iteration 12 (37:41 elapsed) #####
+Train [l=True, p=True]: loss=-3.62, dec_loss=0.0016, violations=0.00236: 100%|█|
+Trained on 164195 samples, start_loss=-3.62, end_loss=-3.62, start_violations=0.00148, end_violations=0.00236 in 52.1 seconds
+100%|████████████████████████████████████████████| 1/1 [00:00<00:00, 122.02it/s]
+100%|██████████████████████████████████████████| 77/77 [00:00<00:00, 141.66it/s]
+lipschitz_k=64.92412354169801 (without delta)
+delta=0.0015007503751875938
+K=0.09743490276392898 (with delta)
+Checking GRID of size 2000
+kernel_t: 14573.44us/iter (35.13 Kints/s): : 4it [01:54, 28.54s/it]
+violations=450854
+hard_violations=0
+Zero hard violations -> refinement of 450854 soft violations
+Took 0.17s to build refinement buffer
+Refine took 0.17s in total
+100%|█████████████████████████████████████| 45086/45086 [10:05<00:00, 74.44it/s]
+Refinement successful!
+info= {'ds_size': 164195, 'lipschitz_k': 64.92412354169801, 'K_p': 3.9105277061462402, 'K_f': 1.0, 'K_l': 10.984488487243652, 'iter': 12, 'runtime': 2261.213531255722, 'delta': 0.0015007503751875938, 'K': 0.09743490276392898, 'avg_increase': 0, 'dec_violations': '588499/4000000', 'hard_violations': '2809/4000000'}
+Decrease condition fulfilled!
+[SAVED]
+100%|█████████████████████████████████████████████| 1/1 [00:00<00:00,  1.93it/s]
+100%|█████████████████████████████████████████████| 3/3 [00:01<00:00,  2.73it/s]
+100%|███████████████████████████████████████████| 77/77 [00:00<00:00, 80.68it/s]
+Init   max = 0.746541
+Unsafe min = 5.00334
+domain min = 0.347241
+Probability of reaching the target safely is at least 91.424% (higher is better)
+
+进程已结束，退出代码为 0
+
+
+
+
+
+使用命令的结果：
+(neural_martingales) ➜  neural_martingales python3 rsm_loop.py --env lds_100 --p_lip 4.0 --only_ppo --ppo_iters 100
+2024-08-05 15:23:27.285819: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-08-05 15:23:27.300531: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-08-05 15:23:27.304973: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-08-05 15:23:27.897564: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1722842608.876529 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842608.902299 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842608.904088 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+/etc/anaconda3/envs/neural_martingales/lib/python3.11/site-packages/gym/spaces/box.py:127: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+2024-08-05 15:23:29.098977: W external/xla/xla/service/gpu/nvptx_compiler.cc:836] The NVIDIA driver's CUDA version is 12.5 which is older than the PTX compiler version (12.6.20). Because the driver is older than the PTX compiler version, XLA is disabling parallel compilation, which may slow down compilation. You should update your NVIDIA driver or use the NVIDIA-provided CUDA forward compatibility packages.
+Iter 0 R=72.55 [9.84, 146.44] with lip = 230.785 (rollouts took 51.0s)
+I0000 00:00:1722842662.761902 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842662.763768 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842662.765394 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842662.767043 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842662.768840 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722842662.770514 3619456 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+policy_loss=0.668: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:07<00:00, 63.37it/s]
+value_loss=252.978: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:02<00:00, 86.75it/s]
+Iter 1 R=101.62 [50.57, 143.10] with lip = 146.773 (rollouts took 1min 21s)
+policy_loss=0.392: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:02<00:00, 165.26it/s]
+value_loss=262.359: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 237.99it/s]
+Iter 2 R=123.72 [73.66, 167.64] with lip = 91.974 (rollouts took 1min 16s)
+policy_loss=0.248: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 498.20it/s]
+value_loss=329.903: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 244.90it/s]
+Iter 3 R=133.29 [101.20, 166.10] with lip = 53.982 (rollouts took 1min 5s)
+policy_loss=0.076: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 908.05it/s]
+value_loss=314.176: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 765.46it/s]
+Iter 4 R=94.03 [15.30, 140.15] with lip = 29.349 (rollouts took 1min 27s)
+policy_loss=0.122: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 763.00it/s]
+value_loss=344.686: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1075.95it/s]
+Iter 5 R=93.95 [-11.35, 146.57] with lip = 15.678 (rollouts took 55.6s)
+policy_loss=-0.028: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 919.71it/s]
+value_loss=268.878: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1103.66it/s]
+Iter 6 R=68.04 [0.10, 131.46] with lip = 7.342 (rollouts took 44.4s)
+policy_loss=0.046: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 950.95it/s]
+value_loss=213.035: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1132.91it/s]
+Iter 7 R=65.28 [-19.80, 145.50] with lip = 4.000 (rollouts took 43.4s)
+policy_loss=-0.189: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 923.97it/s]
+value_loss=264.369: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1097.56it/s]
+Iter 8 R=71.61 [-8.44, 120.08] with lip = 3.998 (rollouts took 43.2s)
+policy_loss=0.189: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 951.13it/s]
+value_loss=221.064: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1080.42it/s]
+Iter 9 R=107.98 [40.65, 154.69] with lip = 3.994 (rollouts took 42.6s)
+policy_loss=-0.096: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 929.62it/s]
+value_loss=347.724: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1156.92it/s]
+Iter 10 R=122.30 [91.44, 159.28] with lip = 4.000 (rollouts took 43.4s)
+policy_loss=0.040: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 957.31it/s]
+value_loss=340.076: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1104.14it/s]
+Iter 11 R=122.98 [83.15, 170.60] with lip = 3.996 (rollouts took 42.5s)
+policy_loss=-0.010: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 931.18it/s]
+value_loss=309.956: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1142.46it/s]
+Iter 12 R=137.61 [45.04, 171.50] with lip = 3.996 (rollouts took 43.7s)
+policy_loss=-0.156: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 938.33it/s]
+value_loss=381.656: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1176.66it/s]
+Iter 13 R=143.24 [99.92, 177.73] with lip = 3.987 (rollouts took 44.0s)
+policy_loss=0.005: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 946.94it/s]
+value_loss=341.468: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1139.69it/s]
+Iter 14 R=147.93 [112.26, 172.84] with lip = 3.977 (rollouts took 43.3s)
+policy_loss=0.098: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 948.41it/s]
+value_loss=400.390: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1138.23it/s]
+Iter 15 R=149.16 [97.54, 178.17] with lip = 3.995 (rollouts took 42.5s)
+policy_loss=0.154: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 926.46it/s]
+value_loss=382.634: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1130.99it/s]
+Iter 16 R=164.48 [132.57, 178.68] with lip = 3.981 (rollouts took 42.8s)
+policy_loss=-0.076: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 937.73it/s]
+value_loss=436.509: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1126.42it/s]
+Iter 17 R=168.60 [146.05, 181.21] with lip = 3.990 (rollouts took 43.3s)
+policy_loss=-0.072: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 886.65it/s]
+value_loss=396.382: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1107.07it/s]
+Iter 18 R=164.72 [130.05, 178.36] with lip = 3.996 (rollouts took 43.0s)
+policy_loss=-0.073: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 933.16it/s]
+value_loss=436.802: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1131.46it/s]
+Iter 19 R=163.67 [126.72, 185.86] with lip = 3.987 (rollouts took 43.2s)
+policy_loss=0.119: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 920.64it/s]
+value_loss=425.928: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1131.08it/s]
+Iter 20 R=169.00 [128.91, 181.74] with lip = 4.002 (rollouts took 43.7s)
+policy_loss=0.045: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 903.18it/s]
+value_loss=427.119: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1095.69it/s]
+Iter 21 R=170.39 [136.47, 181.64] with lip = 3.998 (rollouts took 43.0s)
+policy_loss=0.183: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 939.71it/s]
+value_loss=352.546: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1115.64it/s]
+Iter 22 R=167.07 [136.01, 183.80] with lip = 3.987 (rollouts took 42.7s)
+policy_loss=0.067: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 942.20it/s]
+value_loss=447.876: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1099.63it/s]
+Iter 23 R=173.04 [157.72, 186.80] with lip = 3.965 (rollouts took 43.2s)
+policy_loss=0.093: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 924.57it/s]
+value_loss=403.194: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1131.46it/s]
+Iter 24 R=175.29 [158.81, 188.66] with lip = 3.936 (rollouts took 43.0s)
+policy_loss=0.072: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 954.07it/s]
+value_loss=407.208: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1111.33it/s]
+Iter 25 R=176.01 [163.55, 187.12] with lip = 3.964 (rollouts took 42.4s)
+policy_loss=0.084: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 919.40it/s]
+value_loss=453.923: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1095.92it/s]
+Iter 26 R=173.63 [117.75, 189.02] with lip = 3.956 (rollouts took 43.3s)
+policy_loss=0.054: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 947.72it/s]
+value_loss=422.901: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1150.18it/s]
+Iter 27 R=177.57 [149.37, 188.21] with lip = 3.898 (rollouts took 42.7s)
+policy_loss=-0.124: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 913.09it/s]
+value_loss=409.228: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1082.89it/s]
+Iter 28 R=177.04 [150.91, 187.73] with lip = 3.984 (rollouts took 43.5s)
+policy_loss=0.308: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 922.67it/s]
+value_loss=435.354: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1090.01it/s]
+Iter 29 R=180.18 [167.43, 188.65] with lip = 3.966 (rollouts took 43.7s)
+policy_loss=0.113: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 968.55it/s]
+value_loss=418.772: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1130.78it/s]
+Iter 30 R=180.43 [165.13, 190.88] with lip = 3.961 (rollouts took 43.6s)
+policy_loss=0.058: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 935.39it/s]
+value_loss=507.003: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1095.25it/s]
+Iter 31 R=180.61 [171.05, 188.96] with lip = 3.901 (rollouts took 43.0s)
+policy_loss=0.014: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 934.21it/s]
+value_loss=482.698: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1117.08it/s]
+Iter 32 R=180.61 [169.04, 187.52] with lip = 3.980 (rollouts took 42.7s)
+policy_loss=0.133: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 922.50it/s]
+value_loss=436.008: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1102.80it/s]
+Iter 33 R=181.49 [153.04, 190.97] with lip = 3.927 (rollouts took 43.6s)
+policy_loss=0.241: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 914.61it/s]
+value_loss=403.168: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1106.54it/s]
+Iter 34 R=182.71 [151.60, 190.84] with lip = 3.938 (rollouts took 42.8s)
+policy_loss=-0.109: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 909.30it/s]
+value_loss=530.840: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1114.76it/s]
+Iter 35 R=183.81 [165.63, 192.70] with lip = 3.978 (rollouts took 43.1s)
+policy_loss=0.172: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 934.50it/s]
+value_loss=438.714: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1151.08it/s]
+Iter 36 R=183.68 [169.86, 192.17] with lip = 3.990 (rollouts took 42.6s)
+policy_loss=-0.028: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 955.71it/s]
+value_loss=622.531: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1108.25it/s]
+Iter 37 R=180.69 [160.61, 190.42] with lip = 3.964 (rollouts took 43.4s)
+policy_loss=0.108: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 956.58it/s]
+value_loss=469.043: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1129.05it/s]
+Iter 38 R=184.02 [169.91, 190.97] with lip = 3.985 (rollouts took 43.3s)
+policy_loss=0.201: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 932.42it/s]
+value_loss=587.524: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1121.63it/s]
+Iter 39 R=185.67 [177.87, 192.40] with lip = 3.944 (rollouts took 42.9s)
+policy_loss=0.410: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 927.70it/s]
+value_loss=457.080: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1120.01it/s]
+Iter 40 R=186.81 [178.58, 192.52] with lip = 3.982 (rollouts took 43.1s)
+policy_loss=0.295: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 949.62it/s]
+value_loss=473.382: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1090.64it/s]
+Iter 41 R=186.22 [171.50, 191.79] with lip = 3.922 (rollouts took 43.0s)
+policy_loss=0.101: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 944.53it/s]
+value_loss=480.308: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1130.20it/s]
+Iter 42 R=186.81 [181.25, 192.91] with lip = 3.967 (rollouts took 42.8s)
+policy_loss=-0.017: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 937.85it/s]
+value_loss=445.391: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1120.42it/s]
+Iter 43 R=188.45 [179.16, 193.26] with lip = 3.989 (rollouts took 42.9s)
+policy_loss=0.079: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 909.03it/s]
+value_loss=396.411: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1162.36it/s]
+Iter 44 R=187.94 [175.08, 192.03] with lip = 3.971 (rollouts took 49.2s)
+policy_loss=0.101: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 905.90it/s]
+value_loss=476.205: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1069.76it/s]
+Iter 45 R=189.01 [182.03, 193.52] with lip = 3.869 (rollouts took 53.8s)
+policy_loss=0.235: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 959.39it/s]
+value_loss=477.591: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1130.58it/s]
+Iter 46 R=188.50 [180.51, 193.31] with lip = 3.869 (rollouts took 47.4s)
+policy_loss=0.030: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 924.48it/s]
+value_loss=464.965: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1108.10it/s]
+Iter 47 R=187.69 [182.32, 193.67] with lip = 3.876 (rollouts took 43.7s)
+policy_loss=0.230: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 921.47it/s]
+value_loss=615.593: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1104.07it/s]
+Iter 48 R=188.57 [182.66, 194.47] with lip = 3.984 (rollouts took 43.5s)
+policy_loss=0.102: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 948.43it/s]
+value_loss=493.308: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1130.65it/s]
+Iter 49 R=188.93 [178.91, 194.08] with lip = 4.002 (rollouts took 44.1s)
+policy_loss=0.091: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 915.37it/s]
+value_loss=372.079: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1135.35it/s]
+Iter 50 R=190.06 [183.76, 193.86] with lip = 3.918 (rollouts took 42.9s)
+policy_loss=-0.003: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 972.63it/s]
+value_loss=504.045: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1164.24it/s]
+Iter 51 R=189.55 [184.55, 193.57] with lip = 3.920 (rollouts took 43.5s)
+policy_loss=0.059: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 932.62it/s]
+value_loss=471.632: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1107.57it/s]
+Iter 52 R=189.29 [183.23, 193.49] with lip = 3.987 (rollouts took 43.1s)
+policy_loss=0.059: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 910.70it/s]
+value_loss=454.378: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1094.32it/s]
+Iter 53 R=189.82 [181.51, 194.84] with lip = 3.969 (rollouts took 43.2s)
+policy_loss=0.261: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 925.09it/s]
+value_loss=394.161: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1128.51it/s]
+Iter 54 R=189.23 [182.62, 194.65] with lip = 3.885 (rollouts took 42.7s)
+policy_loss=-0.021: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 930.16it/s]
+value_loss=515.576: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1127.51it/s]
+Iter 55 R=190.80 [186.97, 195.08] with lip = 3.930 (rollouts took 44.3s)
+policy_loss=0.123: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 966.71it/s]
+value_loss=478.244: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1208.79it/s]
+Iter 56 R=191.60 [185.86, 194.54] with lip = 3.930 (rollouts took 45.0s)
+policy_loss=-0.075: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 933.70it/s]
+value_loss=572.231: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1112.77it/s]
+Iter 57 R=191.21 [184.14, 195.20] with lip = 3.942 (rollouts took 57.0s)
+policy_loss=0.020: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 955.01it/s]
+value_loss=444.039: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 287.38it/s]
+Iter 58 R=190.72 [178.73, 195.32] with lip = 3.819 (rollouts took 57.7s)
+policy_loss=0.158: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 907.08it/s]
+value_loss=549.576: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1117.11it/s]
+Iter 59 R=191.12 [187.02, 194.96] with lip = 3.904 (rollouts took 57.4s)
+policy_loss=0.180: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 930.64it/s]
+value_loss=445.715: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1164.71it/s]
+Iter 60 R=190.84 [183.46, 194.10] with lip = 3.883 (rollouts took 56.8s)
+policy_loss=0.127: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 817.48it/s]
+value_loss=477.545: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 964.26it/s]
+Iter 61 R=191.57 [187.23, 194.77] with lip = 3.857 (rollouts took 46.4s)
+policy_loss=0.202: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 921.08it/s]
+value_loss=553.814: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1188.11it/s]
+Iter 62 R=192.39 [188.78, 195.93] with lip = 3.988 (rollouts took 57.0s)
+policy_loss=0.151: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 921.45it/s]
+value_loss=340.985: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1190.46it/s]
+Iter 63 R=192.06 [187.04, 195.17] with lip = 3.917 (rollouts took 49.4s)
+policy_loss=0.035: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 799.09it/s]
+value_loss=464.266: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 978.33it/s]
+Iter 64 R=191.99 [186.61, 195.46] with lip = 3.929 (rollouts took 48.0s)
+policy_loss=0.133: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 990.95it/s]
+value_loss=523.394: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1173.41it/s]
+Iter 65 R=192.01 [188.26, 194.92] with lip = 3.944 (rollouts took 45.2s)
+policy_loss=-0.052: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 891.21it/s]
+value_loss=483.581: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1057.83it/s]
+Iter 66 R=191.87 [186.97, 195.99] with lip = 3.985 (rollouts took 45.8s)
+policy_loss=0.067: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 817.59it/s]
+value_loss=463.548: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 914.98it/s]
+Iter 67 R=192.66 [188.44, 195.50] with lip = 3.984 (rollouts took 45.5s)
+policy_loss=0.011: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 817.71it/s]
+value_loss=496.440: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 963.67it/s]
+Iter 68 R=192.45 [188.00, 195.71] with lip = 3.984 (rollouts took 45.6s)
+policy_loss=0.384: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 796.77it/s]
+value_loss=410.885: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 960.59it/s]
+Iter 69 R=193.11 [188.20, 195.78] with lip = 3.972 (rollouts took 46.6s)
+policy_loss=0.109: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 271.49it/s]
+value_loss=403.056: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 335.37it/s]
+Iter 70 R=193.03 [189.44, 196.05] with lip = 3.957 (rollouts took 1min 30s)
+policy_loss=0.248: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 818.72it/s]
+value_loss=481.685: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1106.76it/s]
+Iter 71 R=193.06 [188.87, 196.19] with lip = 3.950 (rollouts took 1min 27s)
+policy_loss=0.077: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:03<00:00, 153.83it/s]
+value_loss=451.124: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 525.25it/s]
+Iter 72 R=191.58 [184.86, 195.89] with lip = 3.856 (rollouts took 1min 26s)
+policy_loss=0.196: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 331.44it/s]
+value_loss=467.577: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 860.79it/s]
+Iter 73 R=192.99 [188.90, 195.77] with lip = 3.912 (rollouts took 1min 25s)
+policy_loss=0.086: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 763.53it/s]
+value_loss=359.968: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 948.68it/s]
+Iter 74 R=193.29 [190.37, 196.14] with lip = 3.882 (rollouts took 1min 36s)
+policy_loss=0.241: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 945.59it/s]
+value_loss=435.929: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1139.28it/s]
+Iter 75 R=193.37 [189.06, 196.03] with lip = 3.984 (rollouts took 58.3s)
+policy_loss=0.137: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 416.49it/s]
+value_loss=523.637: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 885.99it/s]
+Iter 76 R=193.65 [190.90, 196.23] with lip = 3.985 (rollouts took 57.1s)
+policy_loss=0.177: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 412.76it/s]
+value_loss=497.094: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1054.51it/s]
+Iter 77 R=193.31 [190.59, 196.37] with lip = 3.974 (rollouts took 57.6s)
+policy_loss=0.265: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 902.02it/s]
+value_loss=478.977: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1118.94it/s]
+Iter 78 R=192.90 [188.24, 195.88] with lip = 3.963 (rollouts took 56.6s)
+policy_loss=-0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 954.28it/s]
+value_loss=450.513: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1141.65it/s]
+Iter 79 R=193.63 [190.03, 196.33] with lip = 3.872 (rollouts took 56.7s)
+policy_loss=0.182: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 430.47it/s]
+value_loss=504.852: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1106.07it/s]
+Iter 80 R=193.15 [189.41, 196.07] with lip = 3.930 (rollouts took 56.5s)
+policy_loss=0.242: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 853.68it/s]
+value_loss=480.603: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1070.82it/s]
+Iter 81 R=193.76 [191.36, 196.15] with lip = 3.969 (rollouts took 56.9s)
+policy_loss=0.255: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 956.63it/s]
+value_loss=339.672: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1079.04it/s]
+Iter 82 R=193.43 [191.25, 196.32] with lip = 3.952 (rollouts took 56.9s)
+policy_loss=0.193: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 907.59it/s]
+value_loss=437.565: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1198.55it/s]
+Iter 83 R=194.14 [190.99, 196.80] with lip = 3.999 (rollouts took 57.4s)
+policy_loss=0.318: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 932.11it/s]
+value_loss=405.621: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1139.13it/s]
+Iter 84 R=194.10 [190.58, 196.60] with lip = 3.826 (rollouts took 56.1s)
+policy_loss=0.039: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 899.19it/s]
+value_loss=564.766: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1059.45it/s]
+Iter 85 R=193.98 [191.20, 196.94] with lip = 3.788 (rollouts took 55.5s)
+policy_loss=0.258: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 951.52it/s]
+value_loss=520.109: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1088.96it/s]
+Iter 86 R=194.20 [190.93, 196.74] with lip = 3.908 (rollouts took 53.8s)
+policy_loss=0.278: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 408.37it/s]
+value_loss=516.008: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1092.94it/s]
+Iter 87 R=194.33 [190.27, 196.83] with lip = 3.709 (rollouts took 49.7s)
+policy_loss=0.191: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 931.54it/s]
+value_loss=455.107: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1127.46it/s]
+Iter 88 R=193.91 [191.19, 196.04] with lip = 3.933 (rollouts took 45.0s)
+policy_loss=0.376: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 796.70it/s]
+value_loss=483.095: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 904.12it/s]
+Iter 89 R=194.42 [190.39, 196.83] with lip = 3.753 (rollouts took 45.1s)
+policy_loss=0.075: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 965.54it/s]
+value_loss=442.534: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1108.65it/s]
+Iter 90 R=194.42 [190.71, 197.05] with lip = 3.916 (rollouts took 44.6s)
+policy_loss=0.213: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 947.71it/s]
+value_loss=446.666: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1162.30it/s]
+Iter 91 R=193.59 [190.99, 196.75] with lip = 3.975 (rollouts took 44.1s)
+policy_loss=0.114: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 805.30it/s]
+value_loss=444.150: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 954.90it/s]
+Iter 92 R=194.38 [190.01, 197.25] with lip = 3.811 (rollouts took 43.4s)
+policy_loss=0.022: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 890.60it/s]
+value_loss=540.412: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1107.44it/s]
+Iter 93 R=194.16 [191.45, 197.15] with lip = 3.843 (rollouts took 43.0s)
+policy_loss=0.105: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 929.16it/s]
+value_loss=430.936: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1134.57it/s]
+Iter 94 R=194.06 [191.90, 196.60] with lip = 3.877 (rollouts took 42.9s)
+policy_loss=0.428: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 929.33it/s]
+value_loss=476.688: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1134.15it/s]
+Iter 95 R=194.16 [189.72, 196.85] with lip = 3.682 (rollouts took 44.3s)
+policy_loss=0.256: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 799.49it/s]
+value_loss=524.121: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 927.52it/s]
+Iter 96 R=194.33 [191.24, 196.95] with lip = 3.853 (rollouts took 43.4s)
+policy_loss=0.139: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 952.19it/s]
+value_loss=421.460: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1103.65it/s]
+Iter 97 R=194.44 [192.28, 196.90] with lip = 3.738 (rollouts took 42.1s)
+policy_loss=0.266: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:00<00:00, 940.69it/s]
+value_loss=461.027: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1126.06it/s]
+Iter 98 R=194.49 [189.93, 197.21] with lip = 3.814 (rollouts took 43.1s)
+policy_loss=0.182: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 344.45it/s]
+value_loss=485.323: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1074.06it/s]
+Iter 99 R=194.99 [191.22, 197.33] with lip = 3.986 (rollouts took 56.6s)
+policy_loss=0.179: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 470/470 [00:01<00:00, 325.01it/s]
+value_loss=436.757: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 235/235 [00:00<00:00, 1107.94it/s]
+[SAVED]
+Rollouts (n=10): 194.9 +- 1.0 [193.0, 196.3]
+(neural_martingales) ➜  neural_martingales
+
+
+
+
+(neural_martingales) ➜  neural_martingales python3 rsm_loop.py --env lds_100 --skip_ppo --p_lip 4.0 --grid_factor 8 --batch_size 2048 --reach_prob 0.8
+2024-08-05 17:07:32.281051: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-08-05 17:07:32.295684: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-08-05 17:07:32.300208: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-08-05 17:07:32.915545: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1722848853.996093 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848854.028199 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848854.032331 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+/etc/anaconda3/envs/neural_martingales/lib/python3.11/site-packages/gym/spaces/box.py:127: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+2024-08-05 17:07:34.246564: W external/xla/xla/service/gpu/nvptx_compiler.cc:836] The NVIDIA driver's CUDA version is 12.5 which is older than the PTX compiler version (12.6.20). Because the driver is older than the PTX compiler version, XLA is disabling parallel compilation, which may slow down compilation. You should update your NVIDIA driver or use the NVIDIA-provided CUDA forward compatibility packages.
+Rollouts (n=10): 194.5 +- 1.4 [191.9, 196.5]
+Creating pre-train buffer ...  [done]
+
+#### Iteration 0 (0:00 elapsed) #####
+I0000 00:00:1722848884.075465 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848884.077243 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848884.078809 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848884.080447 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848884.082063 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722848884.083752 4061117 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+Train [l=True, p=False]: loss=-3.61, dec_loss=0.00267, violations=0.00014: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [00:57<00:00,  3.46it/s]
+Trained on 160000 samples, start_loss=2.56, end_loss=-3.61, start_violations=0.037, end_violations=0.00014 in 57.8 seconds
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.73it/s]
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:01<00:00, 18.68it/s]
+lipschitz_k=67.11723565291686 (without delta)
+delta=0.0007501875468867217
+K=0.05035051436827972 (with delta)
+Checking GRID of size 4000
+  7%|████████████▌                                                                                                                                                                               | 1/15 [19:20<4:30:52, 1160.87s/it]kernel_t: 1487220.84us/iter (1.38 Kints/s):  13%|███████████████████▎                                                                                                                             | 2/15 [32:02<3:20:37, 925.97s/it]
+kernel_t: 1113066.15us/iter (1.84 Kints/s): : 16it [2:39:15, 597.21s/it]
+violations=2254489
+hard_violations=0
+Zero hard violations -> refinement of 2254489 soft violations
+Took 0.37s to build refinement buffer
+Refine took 0.37s in total
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 225449/225449 [39:45<00:00, 94.52it/s]
+Refinement successful!
+info= {'ds_size': 160000, 'lipschitz_k': 67.11723565291686, 'K_p': 3.6950764656066895, 'K_f': 1.0, 'K_l': 11.785133361816406, 'iter': 0, 'runtime': 0.004634857177734375, 'delta': 0.0007501875468867217, 'K': 0.05035051436827972}
+Decrease condition fulfilled!
+[SAVED]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.25s/it]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.29s/it]
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:02<00:00,  9.55it/s]
+Init   max = 0.74833
+Unsafe min = 4.89816
+domain min = 0.340877
+Probability of reaching the target safely is at least 91.059% (higher is better)
+(neural_martingales) ➜  neural_martingales
+
+
+
+(neural_martingales) ➜  ~ cd /home/gpu/YanShibo/PyProject/neural_martingales
+(neural_martingales) ➜  neural_martingales python3 rsm_loop.py --env lds_100 --skip_ppo --p_lip 4.0 --grid_factor 8 --batch_size 2048 --reach_prob 0.8 --train_p 0
+2024-08-06 09:28:27.511872: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-08-06 09:28:27.526370: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-08-06 09:28:27.530844: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-08-06 09:28:28.122771: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1722907709.233101  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907709.262684  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907709.267056  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+/etc/anaconda3/envs/neural_martingales/lib/python3.11/site-packages/gym/spaces/box.py:127: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+2024-08-06 09:28:29.455467: W external/xla/xla/service/gpu/nvptx_compiler.cc:836] The NVIDIA driver's CUDA version is 12.5 which is older than the PTX compiler version (12.6.20). Because the driver is older than the PTX compiler version, XLA is disabling parallel compilation, which may slow down compilation. You should update your NVIDIA driver or use the NVIDIA-provided CUDA forward compatibility packages.
+Rollouts (n=10): 195.3 +- 1.2 [193.0, 197.2]
+Creating pre-train buffer ...  [done]
+
+#### Iteration 0 (0:00 elapsed) #####
+I0000 00:00:1722907740.041554  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907740.043344  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907740.045085  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907740.046716  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907740.048368  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+I0000 00:00:1722907740.049917  705561 cuda_executor.cc:1015] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+Train [l=True, p=False]: loss=-3.61, dec_loss=0.00268, violations=0.000189: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 200/200 [00:55<00:00,  3.62it/s]
+Trained on 160000 samples, start_loss=2.57, end_loss=-3.61, start_violations=0.0346, end_violations=0.000189 in 55.3 seconds
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.66it/s]
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:01<00:00, 17.90it/s]
+lipschitz_k=67.43499625748609 (without delta)
+delta=0.0007501875468867217
+K=0.05058889441671875 (with delta)
+Checking GRID of size 4000
+kernel_t: 1267819.13us/iter (1.62 Kints/s): : 16it [3:03:09, 686.84s/it]
+violations=2212890
+hard_violations=0
+Zero hard violations -> refinement of 2212890 soft violations
+Took 0.39s to build refinement buffer
+Refine took 0.39s in total
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 221289/221289 [39:11<00:00, 94.09it/s]
+Refinement successful!
+info= {'ds_size': 160000, 'lipschitz_k': 67.43499625748609, 'K_p': 3.6950764656066895, 'K_f': 1.0, 'K_l': 11.84092903137207, 'iter': 0, 'runtime': 0.004033565521240234, 'delta': 0.0007501875468867217, 'K': 0.05058889441671875}
+Decrease condition fulfilled!
+[SAVED]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.35s/it]
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.28s/it]
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:02<00:00,  9.69it/s]
+Init   max = 0.750208
+Unsafe min = 4.91332
+domain min = 0.342545
+Probability of reaching the target safely is at least 91.081% (higher is better)
+(neural_martingales) ➜  neural_martingales

@@ -310,7 +310,8 @@ class RSMVerifier:
     def compute_bound_init(self, n):
         _, grid_lb, grid_ub = self.get_unfiltered_grid(n)
 
-        mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+        # 这里有报错！
+        mask = np.zeros(grid_lb.shape[0], dtype=jnp.bool)
         # Include if the grid cell intersects with any of the init spaces
         for init_space in self.env.init_spaces:
             intersect = v_intersect(init_space, grid_lb, grid_ub)
@@ -335,7 +336,8 @@ class RSMVerifier:
         _, grid_lb, grid_ub = self.get_unfiltered_grid(n)
 
         # Include only if either lb OR ub are in one of the unsafe sets
-        mask = np.zeros(grid_lb.shape[0], dtype=np.bool)
+        # 这里运行错因为np的bool类型被移除了，把np.bool改成bool_
+        mask = np.zeros(grid_lb.shape[0], dtype=np.bool_)
         for unsafe_space in self.env.unsafe_spaces:
             intersect = v_intersect(unsafe_space, grid_lb, grid_ub)
             mask = np.logical_or(
@@ -396,7 +398,8 @@ class RSMVerifier:
 
     def compute_bounds_on_set(self, grid_lb, grid_ub):
         global_min = jnp.inf
-        global_max = jnp.NINF
+        # # 这里报错jnp.NINF改成np.NINF，np.NINF==-inf
+        global_max = np.NINF
         for i in tqdm(range(int(np.ceil(grid_ub.shape[0] / self.batch_size)))):
             start = i * self.batch_size
             end = np.minimum((i + 1) * self.batch_size, grid_ub.shape[0])

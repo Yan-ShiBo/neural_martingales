@@ -84,6 +84,7 @@ class LDSEnv(gym.Env):
     def noise_bounds(self):
         return -self.noise, self.noise
 
+    # # @是装饰器，partial方法是固定值创建特定函数
     @partial(jax.jit, static_argnums=(0,))
     def next(self, state, action):
         action = jnp.clip(action, -1, 1)
@@ -104,12 +105,25 @@ class LDSEnv(gym.Env):
             # hard harder
             new_y = state[1] + action[0] * 0.2
             new_x = state[0] + new_y * 0.3 + action[0] * 0.05
-        new_y = np.clip(
+
+        # # # 这里的clip会报错
+        # new_y = np.clip(
+        #     new_y, self.observation_space.low[1], self.observation_space.high[1]
+        # )
+        # new_x = np.clip(
+        #     new_x, self.observation_space.low[0], self.observation_space.high[0]
+        # )
+        # # 修改，增加out属性或者把np改成jnp
+        new_y = jnp.clip(
             new_y, self.observation_space.low[1], self.observation_space.high[1]
         )
-        new_x = np.clip(
+        new_x = jnp.clip(
             new_x, self.observation_space.low[0], self.observation_space.high[0]
         )
+
+
+
+
         return jnp.array([new_x, new_y])
 
     def add_noise(self, state):
@@ -121,6 +135,7 @@ class LDSEnv(gym.Env):
     def step(self, action, deterministic=False):
         self.steps += 1
 
+        # 系统下一个状态，这里报错！
         next_state = self.next(self.state, action)
 
         if not deterministic:
