@@ -112,6 +112,9 @@ For simplicity, JAX has removed its internal frames from the traceback of the fo
   0%|          | 0/200 [00:00<?, ?it/s]
 
 
+
+  
+
 版本问题：无法解决，关联的包太多flax optax gym numpy tqdm tensorflow ，jax降低版本对应的这6，7个包都要降，而这些包对应的更多的包也要降
 jax==0.4.14
 flax==0.6.11
